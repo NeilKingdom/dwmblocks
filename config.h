@@ -21,42 +21,36 @@
 #define STATUSLENGTH (LENGTH(blocks) * CMDLENGTH + 1)
 
 typedef struct {
-	char* icon;
-	char* command;
+	char *icon;
+	char *command;
 	unsigned int interval;
 	unsigned int signal;
 } Block;
 
-#ifndef __OpenBSD__
-void dummysighandler(int num);
-#endif
-void sighandler(int num);
-void getcmds(int time);
-void getsigcmds(unsigned int signal);
-void setupsignals();
-void sighandler(int signum);
-int getstatus(char *str, char *last);
-void statusloop();
-void termhandler();
-void pstdout();
-#ifndef NO_X
-void setroot();
-static void (*writestatus) () = setroot;
-static int setupX();
-static Display *dpy;
-static int screen;
-static Window root;
-#else
-static void (*writestatus) () = pstdout;
-#endif
-
 /*** User configuration ***/
 
 static const Block blocks[] = {
-	/* Icon          Command                                                    Update Interval  Update Signal */
-    { " 💾 Mem: ",   "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	30,		         0 },
-    { " 📅 Date: ",  "date '+%b %d (%a)'",					                    60,		         0 },
-    { " 🕛 Time: ",  "date '+%I:%M %p '",					                    60,	             0 },
+    /* Memory usage */
+    {
+        .icon       = " 💾 Mem: ",
+        .command    = "free -h | awk '/^Mem/ {print $3\"/\"$2}' | sed s/i//g",
+        .interval   = 30,
+        .signal     = 0
+    },
+    /* Current date */
+    {
+        .icon       = " 📅 Date: ",
+        .command    = "date '+%b %d (%a)'",
+        .interval   = 60,
+        .signal     = 0
+    },
+    /* Current time */
+    {
+        .icon       = " 🕛 Time: ",
+        .command    = "date '+%I:%M %p '",
+        .interval   = 60,
+        .signal     = 0
+    },
 };
 
 /*
@@ -64,4 +58,28 @@ static const Block blocks[] = {
    A NULL character ('\0') means no delimeter.
 */
 static char delim[] = " |";
-static unsigned int delimLen = 5;
+
+/* Forward function declarations */
+
+#ifndef __OpenBSD__
+void    dummysighandler(int num);
+#endif
+void    sighandler(int num);
+void    getcmds(int time);
+void    getsigcmds(unsigned int signal);
+void    setupsignals();
+void    sighandler(int signum);
+int     getstatus(char *str, char *last);
+void    statusloop();
+void    termhandler();
+void    pstdout();
+#ifndef NO_X
+void    setroot();
+static  void (*writestatus) () = setroot;
+static  int setupX();
+static  Display *dpy;
+static  int screen;
+static  Window root;
+#else
+static  void (*writestatus) () = pstdout;
+#endif

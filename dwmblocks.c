@@ -12,7 +12,7 @@ void getcmd(const Block *block, char *output) {
 	if (!cmdf) return;
 
 	int i = strlen(block->icon);
-	fgets(output + i, CMDLENGTH - i - delimLen, cmdf);
+	fgets(output + i, CMDLENGTH - i - (strlen(delim) + 1), cmdf);
 	i = strlen(output);
 	if (i == 0) {
 		/* Return if block and command output are both empty */
@@ -22,7 +22,7 @@ void getcmd(const Block *block, char *output) {
 	/* Only chop off newline if one is present at the end */
 	i = output[i - 1] == '\n' ? i - 1 : i;
 	if (delim[0] != '\0') {
-		strncpy(output + i, delim, delimLen);
+		strncpy(output + i, delim, (strlen(delim) + 1));
 	} else {
 		output[i++] = '\0';
     }
@@ -141,7 +141,7 @@ int main(int argc, char **argv) {
     /* Handle command line arguments */
 	for (int i = 0; i < argc; i++) {
 		if (!strcmp("-d",argv[i])) {
-			strncpy(delim, argv[++i], delimLen);
+			strncpy(delim, argv[++i], (strlen(delim) + 1));
         } else if (!strcmp("-p",argv[i])) {
 			writestatus = pstdout;
         }
@@ -149,8 +149,7 @@ int main(int argc, char **argv) {
 #ifndef NO_X
 	if (!setupX()) return 1;
 #endif
-	delimLen = MIN(delimLen, strlen(delim));
-	delim[delimLen++] = '\0';
+	delim[strlen(delim)] = '\0';
 	signal(SIGTERM, termhandler);
 	signal(SIGINT,  termhandler);
 	statusloop();
