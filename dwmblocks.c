@@ -3,7 +3,6 @@
 static char statusbar[LENGTH(blocks)][CMDLENGTH] = { 0 };
 static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
-/*static int returnStatus = 0;*/
 
 /* Opens process *cmd and stores output in *output */
 void getcmd(const Block *block, char *output) {
@@ -30,7 +29,7 @@ void getcmd(const Block *block, char *output) {
 }
 
 void getcmds(int time) {
-	const Block* current;
+	const Block *current;
 	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
 		current = blocks + i;
 		if ((current->interval != 0 && time % current->interval == 0)
@@ -80,8 +79,9 @@ int getstatus(char *str, char *last) {
 #ifndef NO_X
 void setroot() {
     /* Only set root if text has changed */
-	if (!getstatus(statusstr[0], statusstr[1]))
+	if (!getstatus(statusstr[0], statusstr[1])) {
 		return;
+    }
 	XStoreName(dpy, root, statusstr[0]);
 	XFlush(dpy);
 }
@@ -140,7 +140,7 @@ void termhandler() {
 int main(int argc, char **argv) {
     /* Handle command line arguments */
 	for (int i = 0; i < argc; i++) {
-		if (!strcmp("-d",argv[i])) {
+		if (!strcmp("-d", argv[i])) {
 			strncpy(delim, argv[++i], (strlen(delim) + 1));
         } else if (!strcmp("-p",argv[i])) {
 			writestatus = pstdout;
