@@ -4,7 +4,7 @@ static char statusbar[LENGTH(blocks)][CMDLENGTH] = { 0 };
 static char statusstr[2][STATUSLENGTH];
 static int statusContinue = 1;
 
-/* Opens process *cmd and stores output in *output */
+/* Opens process cmd and stores output in output */
 void getcmd(const Block *block, char *output) {
 	strcpy(output, block->icon);
 	FILE *cmdf = popen(block->command, "r");
@@ -30,9 +30,10 @@ void getcmd(const Block *block, char *output) {
 
 void getcmds(int time) {
 	const Block *current;
-	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+	for (unsigned int i = 0; i < LENGTH(blocks); ++i) {
 		current = blocks + i;
-		if ((current->interval != 0 && time % current->interval == 0)
+		if ((current->interval != 0
+            && time % current->interval == 0)
             || time == -1)
         {
 			getcmd(current,statusbar[i]);
@@ -42,7 +43,7 @@ void getcmds(int time) {
 
 void getsigcmds(unsigned int signal) {
 	const Block *current;
-	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+	for (unsigned int i = 0; i < LENGTH(blocks); ++i) {
 		current = blocks + i;
 		if (current->signal == signal) {
 			getcmd(current,statusbar[i]);
@@ -53,12 +54,12 @@ void getsigcmds(unsigned int signal) {
 void setupsignals() {
 #ifndef __OpenBSD__
     /* Initialize all real time signals with dummy handler */
-    for (int i = SIGRTMIN; i <= SIGRTMAX; i++) {
+    for (int i = SIGRTMIN; i <= SIGRTMAX; ++i) {
         signal(i, dummysighandler);
     }
 #endif
 
-	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+	for (unsigned int i = 0; i < LENGTH(blocks); ++i) {
 		if (blocks[i].signal > 0) {
 			signal(SIGMINUS + blocks[i].signal, sighandler);
         }
@@ -69,7 +70,7 @@ int getstatus(char *str, char *last) {
 	strcpy(last, str);
 	str[0] = '\0';
 
-	for (unsigned int i = 0; i < LENGTH(blocks); i++) {
+	for (unsigned int i = 0; i < LENGTH(blocks); ++i) {
 		strcat(str, statusbar[i]);
     }
 	str[strlen(str) - strlen(delim)] = '\0';

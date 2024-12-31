@@ -1,12 +1,7 @@
-PREFIX  := /usr/local
-CC      := gcc
+CC := gcc
+PREFIX := /usr/local
 CCFLAGS := -pedantic -Wall -Wno-deprecated-declarations -Os
 LDFLAGS := -lX11
-
-# FreeBSD (uncomment)
-#LDFLAGS += -L/usr/local/lib -I/usr/local/include
-# OpenBSD (uncomment)
-#LDFLAGS += -L/usr/X11R6/lib -I/usr/X11R6/include
 
 all: options dwmblocks
 

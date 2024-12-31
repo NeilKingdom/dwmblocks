@@ -16,8 +16,8 @@
 #define SIGMINUS		SIGRTMIN
 #endif
 #define LENGTH(X)       (sizeof(X) / sizeof (X[0]))
-#define CMDLENGTH		50
 #define STATUSLENGTH    (LENGTH(blocks) * CMDLENGTH + 1)
+#define CMDLENGTH		50
 
 typedef struct {
 	char *icon;
