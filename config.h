@@ -70,7 +70,7 @@ void    setupsignals();
 void    sighandler(int signum);
 int     getstatus(char *str, char *last);
 void    statusloop();
-void    termhandler();
+void    termhandler(int signal);
 void    pstdout();
 #ifndef NO_X
 void    setroot();

@@ -134,7 +134,8 @@ void sighandler(int signum) {
 	writestatus();
 }
 
-void termhandler() {
+void termhandler(int signal) {
+    (void)signal;
 	statusContinue = 0;
 }
 
