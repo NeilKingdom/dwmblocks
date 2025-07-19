@@ -31,21 +31,28 @@ typedef struct {
 static const Block blocks[] = {
     /* Memory usage */
     {
-        .icon       = " 💾 Mem: ",
+        .icon       = " 💾 ",
         .command    = "free -h | awk '/^Mem/ {print $3\"/\"$2}' | sed s/i//g",
         .interval   = 30,
         .signal     = 0
     },
+    /* Weather */
+    {
+        .icon       = " ",
+        .command    = "curl 'https://wttr.in?format=3' | awk '{print $2\" \"$3}'",
+        .interval   = 3600,
+        .signal     = 0
+    },
     /* Current date */
     {
-        .icon       = " 📅 Date: ",
-        .command    = "date '+%b %d (%a)'",
+        .icon       = " 📅 ",
+        .command    = "date '+%b %d'",
         .interval   = 60,
         .signal     = 0
     },
     /* Current time */
     {
-        .icon       = " 🕛 Time: ",
+        .icon       = " 🕛 ",
         .command    = "date '+%I:%M %p '",
         .interval   = 60,
         .signal     = 0
